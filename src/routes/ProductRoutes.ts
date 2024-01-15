@@ -16,6 +16,9 @@ export class ProductRoutes implements RoutesInterface{
 
   public register(): void {
     this.router.get('/', this.controller.find.bind(this.controller));
+    this.router.get('/:id', this.controller.findById.bind(this.controller));
     this.router.post('/', this.controller.save.bind(this.controller));
+    this.router.put('/:id', this.controller.update.bind(this.controller));
+    this.router.delete('/:id', this.controller.delete.bind(this.controller));
   }
 }
