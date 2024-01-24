@@ -1,6 +1,6 @@
 import express from 'express';
 
-export interface RoutesInterface{
+export interface IRoutes{
   register(): void;
   router: express.Router;
 }
