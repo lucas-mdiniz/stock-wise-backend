@@ -11,7 +11,6 @@ export class Routes{
   }
 
   public registerAll(){
-    console.log(this.appURI);
     this.app.use(`${this.appURI}/product`, new ProductRoutes().router);
   }
 }
