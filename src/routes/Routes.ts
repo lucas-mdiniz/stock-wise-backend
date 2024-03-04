@@ -1,16 +1,17 @@
 import express from 'express';
-import { ProductRoutes } from './ProductRoutes';
+import { ProductRoutes } from '../Product/routes/ProductRoutes';
+import { ProductController } from '../Product/controllers/ProductController';
+import { ProductService } from '../Product/service/ProductService';
+import { ProductRepository } from '../Product/repository/ProductRepository';
 
 export class Routes{
   private app: express.Application;
-  private appURI: string;
 
   constructor(app:express.Application){
     this.app = app;
-    this.appURI = `/api/${process.env.API_VERSION}`;
   }
 
   public registerAll(){
-    this.app.use(`${this.appURI}/product`, new ProductRoutes().router);
+    new ProductRoutes(new ProductController(new ProductService(new ProductRepository))).register(this.app);
   }
 }
