@@ -1,7 +1,7 @@
-import { HttpResponse } from '../HttpResponse';
-import { BaseError } from './BaseError';
 import status from 'http-status';
 import express, { Request, Response, NextFunction } from 'express';
+import { HttpResponse } from '../http/HttpResponse';
+import { BaseError } from './BaseError';
 import { MongoServerError } from 'mongodb';
 
 export class ErrorHandler {
@@ -29,9 +29,9 @@ export class ErrorHandler {
       return;
     }
 
-    const httpRes: HttpResponse = new HttpResponse();
+    const httpRes: HttpResponse<null> = new HttpResponse();
     httpRes.status = error.status;
-    httpRes.error = error.message;
+    httpRes.errors = error.message;
     res.status(httpRes.status).json(httpRes.toJson());
   }
 
@@ -47,16 +47,16 @@ export class ErrorHandler {
       return;
     }
 
-    const httpRes: HttpResponse = new HttpResponse();
+    const httpRes: HttpResponse<null> = new HttpResponse();
     httpRes.status = status.BAD_REQUEST;
 
     switch (error.codeName) {
       case 'DuplicateKey':
-        httpRes.error = `Chave única duplicada: ${JSON.stringify(error.keyValue)}`;        
+        httpRes.errors = `Chave única duplicada: ${JSON.stringify(error.keyValue)}`;        
         break;
     
       default:
-        httpRes.error = error.message;
+        httpRes.errors = error.message;
         break;
     }
     
@@ -74,9 +74,9 @@ export class ErrorHandler {
       return;
     }
 
-    const httpRes: HttpResponse = new HttpResponse();
+    const httpRes: HttpResponse<null> = new HttpResponse();
     httpRes.status = status.BAD_REQUEST;
-    httpRes.error = error.message;
+    httpRes.errors = error.message;
     res.status(httpRes.status).json(httpRes.toJson());
   }
 
@@ -87,9 +87,9 @@ export class ErrorHandler {
     next: NextFunction
   ) {
     
-    const httpRes: HttpResponse = new HttpResponse();
+    const httpRes: HttpResponse<null> = new HttpResponse();
     httpRes.status = status.INTERNAL_SERVER_ERROR;
-    httpRes.error = String(error);
+    httpRes.errors = (String(error));
     res.status(httpRes.status).json(httpRes.toJson());
   }
 }

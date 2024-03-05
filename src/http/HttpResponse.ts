@@ -1,19 +1,19 @@
-export class HttpResponse {
-  private _data!: object | null;
-  private _error: string;
+export class HttpResponse<T> {
+  private _data!: T;
+  private _errors: string[];
   private _count: number;
   private _status!: number;
 
   constructor() {
-    this._error = '';
+    this._errors = [];
     this._count = 0;
   }
 
-  get data(): object | null {
+  get data(): T {
     return this._data;
   }
 
-  set data(data: object | null) {
+  set data(data: T) {
     this._data = data;
 
     if (data) {
@@ -21,16 +21,14 @@ export class HttpResponse {
     }
   }
 
-  get error(): string {
-    return this._error;
+  get errors(): string {
+    return this._errors.join(',');
   }
 
-  set error(error: string) {
-    this._error = error;
-  }
-
-  get count(): number {
-    return this._count;
+  set errors(errors: string){
+    errors.split(',').forEach(error => {
+      this._errors.push(error)
+    });
   }
 
   set status(status: number) {
@@ -44,7 +42,7 @@ export class HttpResponse {
   toJson() {
     return {
       data: this._data ? this._data : {},
-      error: this._error,
+      errors: this._errors,
       count: this._count,
     };
   }
